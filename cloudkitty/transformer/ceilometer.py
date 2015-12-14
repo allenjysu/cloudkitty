@@ -61,10 +61,17 @@ class CeilometerTransformer(transformer.BaseTransformer):
         res_data['size'] = data.metadata['size']
         return res_data
 
+    def _strip_radosgw(self, data):
+        res_data = {}
+        res_data['project_id'] = data.project_id
+        return res_data
+
     def strip_resource_data(self, res_type, res_data):
         if res_type == 'compute':
             return self._strip_compute(res_data)
         elif res_type == 'volume':
             return self._strip_volume(res_data)
+        elif res_type == 'radosgw.containers.objects.size':
+            return self._strip_radosgw(res_data)
         else:
             return res_data.metadata

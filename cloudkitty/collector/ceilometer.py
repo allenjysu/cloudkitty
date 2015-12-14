@@ -328,3 +328,31 @@ class CeilometerCollector(collector.BaseCollector):
                                             'network.floating')
         return self.t_cloudkitty.format_service('network.floating',
                                                 floating_data)
+
+    def get_radosgw_containers_objects_size(self, start, end=None, project_id=None, q_filter=None):
+        active_radosgw_stats = self.resources_stats('radosgw.containers.objects.size',
+                                                    start,
+                                                    end,
+                                                    project_id,
+                                                    q_filter)
+        radosgw_data = []
+        for radosgw_stats in active_radosgw_stats:
+            radosgw_id, radosgw_container = radosgw_stats.groupby['resource_id'].split('/')
+            if not self._cacher.has_resource_detail('radosgw.containers.objects.size',
+                                                    radosgw_container):
+                raw_resource = self._conn.resources.get(radosgw_id)
+                radosgw = self.t_ceilometer.strip_resource_data('radosgw.containers.objects.size',
+                                                                raw_resource)
+                radosgw['container'] = radosgw_container
+                self._cacher.add_resource_detail('radosgw.containers.objects.size',
+                                                 radosgw_container,
+                                                 radosgw)
+            radosgw = self._cacher.get_resource_detail('radosgw.containers.objects.size',
+                                                       radosgw_container)
+            radosgw_size_mb = radosgw_stats.max / 1048576.0
+            radosgw_data.append(self.t_cloudkitty.format_item(radosgw,
+                                                              'MB',
+                                                              radosgw_size_mb))
+        if not radosgw_data:
+            raise collector.NoDataCollected(self.collector_name, 'radosgw.containers.objects.size')
+        return self.t_cloudkitty.format_service('radosgw.containers.objects.size', radosgw_data)

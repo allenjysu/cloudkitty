@@ -269,6 +269,8 @@ class HashMap(rating.RatingProcessorBase):
             cur_usage = cur_data['usage']
             for service_name, service_data in cur_usage.items():
                 for item in service_data:
+                    if item['vol']['qty'] is None:
+                        item['vol']['qty'] = 0
                     self._res = {}
                     self.process_services(service_name, item)
                     self.process_fields(service_name, item)
