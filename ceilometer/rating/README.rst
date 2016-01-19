@@ -18,17 +18,21 @@ adjust /etc/ceilometer/pipeline.yaml
 .. code-block:: bash
 
     sources:
+        - name: meter_source
+        interval: 600
+        meters:
+            - "*"
+            - "!cloudkitty.rating"
+      sinks:
+          - meter_sink
+        ...
         - name: rating_source
         interval: 1800
         meters:
             - "cloudkitty.rating"
         sinks:
-            - rating_sink
-    sinks:
-        - name: rating_sink
-        transformers:
-        publishers:
-            - notifier://
+            - meter_sink
+
 
 
 
