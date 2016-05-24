@@ -156,3 +156,14 @@ class CSVCollector(collector.BaseCollector):
                               project_id,
                               q_filter)
 
+    def get_bandwidth(self,
+                             start,
+                             end=None,
+                             project_id=None,
+                             q_filter=None):
+        return self._get_data('bandwidth',
+                              start,
+                              end,
+                              project_id,
+                              q_filter)
+
