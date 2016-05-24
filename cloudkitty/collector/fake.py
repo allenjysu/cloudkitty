@@ -145,3 +145,14 @@ class CSVCollector(collector.BaseCollector):
                               end,
                               project_id,
                               q_filter)
+    def get_radosgw_containers_objects_size(self,
+                             start,
+                             end=None,
+                             project_id=None,
+                             q_filter=None):
+        return self._get_data('radosgw.containers.objects.size',
+                              start,
+                              end,
+                              project_id,
+                              q_filter)
+
