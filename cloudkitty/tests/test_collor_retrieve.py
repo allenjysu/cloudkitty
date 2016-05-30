@@ -111,6 +111,18 @@ class Test(unittest.TestCase):
         self.assertIsNotNone(vol,'is none')
         #self.assertEqual(calc_dt, check_dt)
 
+    def test_get_radosgw_api_request(self):
+        print sys._getframe().f_code.co_name
+        check_dt={}
+        #raw_data =func( '1464525000', '1464525060', '982ea1a1fa2f4efda4a89bee11425c75', None)
+        check_dt= self.collector.retrieve('radosgw.api.request','1464515000','1464519060')
+        
+        vol = check_dt['radosgw.api.request'][0]
+        print vol
+        self.assertIsNotNone(vol,'is none')
+        #self.assertEqual(calc_dt, check_dt)
+
+
 
     def _load_transformers(self):
         self.transformers = {}
